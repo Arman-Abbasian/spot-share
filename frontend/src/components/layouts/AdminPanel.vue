@@ -17,7 +17,7 @@ const isSlideOverOpen = ref<boolean>(false)
 const isMobile = ref<boolean>(window.innerWidth <= 768);
 
 const closeSlideOver=()=>{
-  isSlideOverOpen.value=false
+  isSlideOverOpen.value=false;
 } 
 
 const toggleSlideOver = () => {
@@ -35,7 +35,7 @@ const toggleSlideOver = () => {
       </button>
   
       <!-- Slide-Over Menu for Mobile -->
-      <v-container v-if="isSlideOverOpen" class="slide-over bg-purple-lighten-2" @click.self="toggleSlideOver">
+      <v-container v-if="isSlideOverOpen"  class="slide-over bg-purple-lighten-2 " @click="toggleSlideOver">
         <div class="slide-over-content bg-purple-lighten-5">
           <button class="close-button" @click="toggleSlideOver">✕</button>
           <nav>
@@ -74,7 +74,7 @@ const toggleSlideOver = () => {
       </nav>
   
       <!-- Main Content Area -->
-        <v-container class="bg-primary p-4">
+        <v-container class="bg-primary" :class="{ 'pt-16': isMobile }">
           <router-view />
         </v-container>
 
@@ -89,7 +89,8 @@ const toggleSlideOver = () => {
   
   .mobile-menu-button {
     display: none;
-    padding: 10px;
+    width: 50px;
+    height: 50px;
     background-color: #333;
     color: #fff;
     border: none;
@@ -97,7 +98,8 @@ const toggleSlideOver = () => {
     position: fixed;
     top: 10px;
     left: 10px;
-    z-index: 20;
+    z-index: 20px;
+    border-radius: 5px;
   }
   
   @media (max-width: 768px) {
