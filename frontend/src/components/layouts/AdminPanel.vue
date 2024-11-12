@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed} from 'vue'
+import { ref} from 'vue'
 
 interface NavOption {
   name: string
@@ -16,17 +16,14 @@ const currentOption = ref<string>('home')
 const isSlideOverOpen = ref<boolean>(false)
 const isMobile = ref<boolean>(window.innerWidth <= 768);
 
-const selectOption = (option: string) => {
-  currentOption.value = option
-}
+const closeSlideOver=()=>{
+  isSlideOverOpen.value=false
+} 
 
 const toggleSlideOver = () => {
   isSlideOverOpen.value = !isSlideOverOpen.value
 }
 
-const currentOptionLabel = computed(() => {
-  return navOptions.find((option) => option.name === currentOption.value)?.label || ''
-})
 
 </script>
 
@@ -38,23 +35,27 @@ const currentOptionLabel = computed(() => {
       </button>
   
       <!-- Slide-Over Menu for Mobile -->
-      <div v-if="isSlideOverOpen" class="slide-over" @click.self="toggleSlideOver">
-        <div class="slide-over-content">
+      <v-container v-if="isSlideOverOpen" class="slide-over bg-purple-lighten-2" @click.self="toggleSlideOver">
+        <div class="slide-over-content bg-purple-lighten-5">
           <button class="close-button" @click="toggleSlideOver">✕</button>
           <nav>
             <ul>
-              <li v-for="option in navOptions" :key="option.name">
-                <button
-                  @click="selectOption(option.name); toggleSlideOver()"
-                  :class="{ active: currentOption === option.name }"
-                >
-                  {{ option.label }}
-                </button>
-              </li>
+              <li class="" key="home">
+            <router-link to='/admin-panel'>
+              Home
+            </router-link>
+          </li>
+          <li v-for="option in navOptions" :key="option.name">
+            <router-link :to='`/admin-panel/${option.name}`' 
+            :onclick="closeSlideOver"
+            :class="{ active: currentOption === option.name }">
+              {{ option.label }}
+            </router-link>
+          </li>
             </ul>
           </nav>
         </div>
-      </div>
+      </v-container>
   
       <!-- Sidebar for Desktop -->
       <nav class="sidebar bg-secondary-darken-1" v-if="!isMobile">
@@ -65,7 +66,7 @@ const currentOptionLabel = computed(() => {
             </router-link>
           </li>
           <li v-for="option in navOptions" :key="option.name">
-            <router-link :to='`admin-panel/${option.name}`' :class="{ active: currentOption === option.name }">
+            <router-link :to='`/admin-panel/${option.name}`' :class="{ active: currentOption === option.name }">
               {{ option.label }}
             </router-link>
           </li>
@@ -73,10 +74,10 @@ const currentOptionLabel = computed(() => {
       </nav>
   
       <!-- Main Content Area -->
-      <section class="content" style="background: rgb(var(--v-theme-primary-lighten-1))">
-        <h1>{{ currentOptionLabel }}</h1>
-  
-      </section>
+        <v-container class="bg-primary p-4">
+          <router-view />
+        </v-container>
+
     </div>
   </template>
   
